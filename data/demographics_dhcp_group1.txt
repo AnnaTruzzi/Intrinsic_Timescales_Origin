@@ -1,0 +1,13 @@
+dhcp dhcp_group1 birthday max: 42.142857142857 
+dhcp dhcp_group1 birthday min: 25.571428571429 
+dhcp dhcp_group1 birthday mean: 38.83311081441921 
+dhcp dhcp_group1 birthday SD: 3.3108106396861476 
+dhcp dhcp_group1 weight max: 4.7 
+dhcp dhcp_group1 weight mean: 3.137254716981132 
+dhcp dhcp_group1 weight SD: 0.7770355138835294 
+dhcp dhcp_group1 age max: 44.857142857143 
+dhcp dhcp_group1 age min: 29.285714285714 
+dhcp dhcp_group1 age mean: 40.51668891855804 
+dhcp dhcp_group1 age SD: 2.7970751773767963 
+dhcp dhcp_group1 males n: 64 
+dhcp dhcp_group1 females n: 43

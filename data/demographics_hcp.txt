@@ -1,0 +1,6 @@
+tot sample:176 
+tot females:99 
+tot males:77 
+min age:22-25 
+max age:36+ 
+mean age:29.0 
