@@ -110,7 +110,6 @@ if run_within_analysis:
             if nan_percentage>50:
                 highnan_idx.append(i)
         tau = np.delete(tau,highnan_idx,axis=0)
-        #snr = np.delete(snr,highnan_idx,axis=0)
         np.savetxt(f'/dhcp/fmri_anna_graham/dhcp_hcp_timescales/results/tau_estimation_in_seconds_{group}_7net.txt',tau)
 
         # plot distribution
@@ -132,14 +131,12 @@ if run_within_analysis:
         std = np.loadtxt('/dhcp/fmri_anna_graham/dhcp_hcp_timescales/results/STD_estimation_dhcp_group1_7net.txt')
         snr_mean=np.mean(snr,axis=0)
         net_dict = get_net_dict()        
-        low_snr_idx = np.where(snr_mean<40)
-        high_snr_index = np.where(snr_mean>=40)
         if 'group1' in group:
             corr_with_snr(snr_mean,tau_mean)
         
         # get data for brain rendering
         if run_brainrenders:
-            brain_renders.brainrenders(group,tau_mean,net_dict,low_snr_idx)
+            brain_renders.brainrenders(group,tau_mean,net_dict)
 
 
         ### barplots for single networks
@@ -197,8 +194,6 @@ if run_between_analysis:
     dhcp_group2_mean = np.loadtxt(f'/dhcp/fmri_anna_graham/dhcp_hcp_timescales/results/tau_estimation_ROImean_dhcp_group2_7net.txt')
     hcp_mean = np.loadtxt(f'/dhcp/fmri_anna_graham/dhcp_hcp_timescales/results/tau_estimation_ROImean_hcp_7net.txt')
     snr_mean=np.mean(snr,axis=0)
-    low_snr_idx = np.where(snr_mean<40)[0]
-    high_snr_index = np.where(snr_mean>=40)[0]
 
     correlations.run_and_plot_corr(dhcp_group1_mean,dhcp_group2_mean,'dhcp_group1','dhcp_group2',f'/dhcp/fmri_anna_graham/dhcp_hcp_timescales/figures/corr_dhcp1_dhcp2_7net.png',xlim=(0,8),ylim=(0,8))
     correlations.run_and_plot_partial_corr(dhcp_group1_mean,dhcp_group2_mean,snr_mean,f'/dhcp/fmri_anna_graham/dhcp_hcp_timescales/results/partial_corr_dhcp1_dhcp2_snr_7net.csv')
