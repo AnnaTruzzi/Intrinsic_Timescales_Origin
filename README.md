@@ -1,7 +1,7 @@
 # Intrinsic_Timescales_Origin
 
 Thi repository contains the code and information to reproduce the analysis performed in the following pre-print:
-Truzzi, A., Cusack, R. (2022 - preprint). "The origin of intrinsic timescales: A comparison between the neonate and adult brain".
+Truzzi, A., Cusack, R. (2022 - preprint). "The origin of intrinsic timescales: A comparison between the neonate and adult brain". https://doi.org/10.31234/osf.io/skzqv
 
 The data folder contains participants' code and demographic information as well as the atlases used in the ROI analysis. 
 
