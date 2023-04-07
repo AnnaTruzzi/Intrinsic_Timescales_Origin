@@ -34,7 +34,7 @@ def run_and_plot_partial_corr(x,y,covar,outname):
     res.to_csv(outname)
 
 
-def run_and_plot_corr_bynet(x,y,x_label,y_label,net_dict,xlim=(0,15), ylim=(0,15)):
+def run_and_plot_corr_bynet(x,y,x_label,y_label,net_dict,xlim=(0,15), ylim=(0,15),flag='',snr_flag=''):
     for i,net in enumerate(net_dict.keys()):
         net_idx=net_dict[net]
         r,p = spearmanr(x[net_idx],y[net_idx])
@@ -51,7 +51,7 @@ def run_and_plot_corr_bynet(x,y,x_label,y_label,net_dict,xlim=(0,15), ylim=(0,15
             plt.xlim(xlim)
             plt.ylim(ylim)
         plt.suptitle(f'{net} \n r = {round(r,4)}, p = {round(p,4)}, N = {num_roi}')
-        plt.savefig(f'/dhcp/fmri_anna_graham/dhcp_hcp_timescales/figures/corr_{x_label}_{y_label}_{net}_7net.png')
-        plt.savefig(f'/dhcp/fmri_anna_graham/dhcp_hcp_timescales/figures/corr_{x_label}_{y_label}_{net}_7net.pdf')
+        plt.savefig(f'/dhcp/fmri_anna_graham/dhcp_hcp_timescales/figures/corr_{x_label}_{y_label}_{net}_7net_{flag}{snr_flag}.png')
+        plt.savefig(f'/dhcp/fmri_anna_graham/dhcp_hcp_timescales/figures/corr_{x_label}_{y_label}_{net}_7net_{flag}{snr_flag}.pdf')
         #plt.show()
         plt.close()

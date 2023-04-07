@@ -17,7 +17,7 @@ def render(index_list,out_values,atlas,outvolume_size,outname):
     outimage.uncache()
 
 
-def brainrenders(group,tau_mean,net_dict):
+def brainrenders(group,tau_mean,net_dict,flag):
     if 'dhcp' in group:
         ## Load templates and set outvolume size
         atlas = nib.load('/dhcp/fmri_anna_graham/dhcp_hcp_timescales/data/schaefer_40weeks_7net.nii.gz')
@@ -30,14 +30,14 @@ def brainrenders(group,tau_mean,net_dict):
 
     ##### TAU distribution visualisation    
     print(f'Working on tau render for {group}....')
-    render(range(0,tau_mean.shape[0]),tau_mean,atlas,outvolume_size,f"/dhcp/fmri_anna_graham/dhcp_hcp_timescales/results/{group}_tauvalues_render_7net.nii.gz")
+    render(range(0,tau_mean.shape[0]),tau_mean,atlas,outvolume_size,f"/dhcp/fmri_anna_graham/dhcp_hcp_timescales/results/{group}_tauvalues_render_7net_{flag}.nii.gz")
 
     ##### ROI visualisation and grouping
 
     ## Load ROI label file
     print(f'Working on roi renders....')
-    network_file7 = pd.read_csv('/dhcp/fmri_anna_graham/dhcp_hcp_timescales/data/Schaefer2018_400Parcels_7Networks_order.txt',sep = '\t', header = None)
-    roi_names_all = np.array(network_file7[1])
+    #network_file7 = pd.read_csv('/dhcp/fmri_anna_graham/dhcp_hcp_timescales/data/Schaefer2018_400Parcels_7Networks_order.txt',sep = '\t', header = None)
+    #roi_names_all = np.array(network_file7[1])
 
     ## Get indexes and names of unimodal vs transmodal rois + make brain render file.
     unimodal_index=[]
