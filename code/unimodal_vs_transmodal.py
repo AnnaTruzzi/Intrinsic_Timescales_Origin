@@ -28,15 +28,57 @@ def cohend(d1, d2):
 	return (u1 - u2) / s
 
 
-def age_corr(tau,experience_age,network_type,label,flag,snr_flag):
-    r,p = spearmanr(np.array(experience_age),np.array(tau))
-    plt.scatter(np.array(experience_age),np.array(tau),alpha=0.5,s=15,color='#014182')
-    plt.xlim((-0.05,18))
-    plt.ylim((-0.05,14))
-    plt.suptitle(f'Experience_age and Tau - {label} \n r={r}, p={p}')
-    plt.savefig(f'/dhcp/fmri_anna_graham/dhcp_hcp_timescales/figures/experience_age_corr_with_tau_{label}_{network_type}_{flag}{snr_flag}.png')
-    plt.savefig(f'/dhcp/fmri_anna_graham/dhcp_hcp_timescales/figures/experience_age_corr_with_tau_{label}_{network_type}_{flag}{snr_flag}.pdf')
+def age_model(tau,scan_age,experience_age,network_type,label,flag,snr_flag):  
+    data_dict = {'scan_age':np.array(scan_age),
+                    'experience_age':np.array(experience_age),
+                    'tau':tau}
+    data_df = pd.DataFrame(data_dict)
+    X = data_df[['scan_age','experience_age']]
+    X = sm.add_constant(X) 
+    model=sm.OLS(data_df['tau'],X)
+    results=model.fit()
+    print(results.summary()) 
+    r_collinearity,p_collinearity = spearmanr(np.array(scan_age),np.array(experience_age))
+    
+    plt.scatter(data_df['scan_age'],data_df['tau'])
+    plt.suptitle('Relation between scan_age and tau')
+    plt.savefig(f'/dhcp/fmri_anna_graham/dhcp_hcp_timescales/figures/age_model_scan_age_relation_{label}_{network_type}_{flag}{snr_flag}.png')
     plt.close()
+
+    plt.scatter(data_df['experience_age'],data_df['tau'])
+    plt.suptitle('Relation between experience_age and tau')
+    plt.savefig(f'/dhcp/fmri_anna_graham/dhcp_hcp_timescales/figures/age_model_experience_age_relation_{label}_{network_type}_{flag}{snr_flag}.png')
+    plt.close()
+
+    par_corr_scan_age = partial_corr(data=data_df, x='scan_age', y='tau', covar='experience_age', method='spearman')
+    par_corr_exp_age = partial_corr(data=data_df, x='experience_age', y='tau', covar='scan_age', method='spearman')
+    with open(f'/dhcp/fmri_anna_graham/dhcp_hcp_timescales/results/age_model_{label}_{network_type}_{flag}{snr_flag}.txt', 'w') as f:
+        print(results.summary(), file=f)
+        f.write(f'\n Collinearity check: r={r_collinearity}, p={p_collinearity} \n')
+        f.write('####  Partial corr - scan_age & tau \n')
+        print(par_corr_scan_age,file=f)
+        f.write('####  Partial corr - experience_age & tau \n')
+        print(par_corr_exp_age,file=f)
+
+
+def age_corr(tau,experience_age,network_type,label,flag,snr_flag):
+    outliers=['','_nooutliers']
+    for outlier_flag in outliers:
+        if outlier_flag=='_nooutliers':
+            nooutlier_idx = np.where(experience_age<(np.mean(experience_age+(2*np.std(experience_age)))))
+            experience_age = experience_age[nooutlier_idx]
+            tau = tau[nooutlier_idx]
+            xlim = (-0.05,7)
+        else:
+            xlim = (-0.05,18)
+        r,p = spearmanr(np.array(experience_age),np.array(tau))
+        plt.scatter(np.array(experience_age),np.array(tau),alpha=0.5,s=15,color='#014182')
+        plt.xlim(xlim)
+        plt.ylim((-0.05,14))
+        plt.suptitle(f'Experience_age and Tau - {label} \n r={r}, p={p}')
+        plt.savefig(f'/dhcp/fmri_anna_graham/dhcp_hcp_timescales/figures/experience_age_corr_with_tau_{label}_{network_type}_{flag}{snr_flag}{outlier_flag}.png')
+        plt.savefig(f'/dhcp/fmri_anna_graham/dhcp_hcp_timescales/figures/experience_age_corr_with_tau_{label}_{network_type}_{flag}{snr_flag}{outlier_flag}.pdf')
+        plt.close()
 
 
 def unimodal_vs_transmodal(group1, group2, unimodal_idx, transmodal_idx, group2_weights, label1, label2,flag,snr_flag):
